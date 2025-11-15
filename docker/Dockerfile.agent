@@ -1,0 +1,81 @@
+FROM ubuntu:22.04
+
+# Avoid interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install base dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    build-essential \
+    python3 \
+    python3-pip \
+    nodejs \
+    npm \
+    tmux \
+    screen \
+    lynx \
+    vim \
+    nano \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Tailscale
+RUN curl -fsSL https://tailscale.com/install.sh | sh
+
+# Install Go (required for ht)
+RUN wget -q https://go.dev/dl/go1.21.5.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.21.5.linux-amd64.tar.gz && \
+    rm go1.21.5.linux-amd64.tar.gz
+ENV PATH=$PATH:/usr/local/go/bin
+
+# Install ht (terminal emulator)
+RUN go install github.com/andyk/ht@latest
+ENV PATH=$PATH:/root/go/bin
+
+# Install image viewing tools
+# For terminal image viewing, we'll use chafa or similar
+RUN apt-get update && apt-get install -y \
+    imagemagick \
+    chafa \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js dependencies for MCP client
+RUN npm install -g @modelcontextprotocol/sdk
+
+# Install Claude Code CLI (if available)
+# Note: This installs the Claude Code CLI tool
+RUN curl -fsSL https://claude.ai/install.sh | bash || echo "Claude Code CLI installation skipped (may require interactive auth)"
+
+# Install Codex CLI
+RUN npm install -g @openai/codex || echo "Codex CLI installation skipped"
+
+# Create workspace directory
+RUN mkdir -p /workspace
+WORKDIR /workspace
+
+# Copy agent integration code
+COPY agents/ /app/agents/
+WORKDIR /app/agents
+RUN npm install && npm run build
+
+# Copy setup scripts
+COPY docker/ht-setup.sh /usr/local/bin/ht-setup.sh
+RUN chmod +x /usr/local/bin/ht-setup.sh
+
+# Copy agent initialization script
+COPY docker/agent-init.sh /usr/local/bin/agent-init.sh
+RUN chmod +x /usr/local/bin/agent-init.sh
+
+WORKDIR /workspace
+
+# Set up environment
+ENV TERM=xterm-256color
+ENV SHELL=/bin/bash
+
+# Default command
+CMD ["/usr/local/bin/agent-init.sh"]
+
