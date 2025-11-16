@@ -6,9 +6,13 @@ docker compose up --build
 
 # TODO
 
-- [ ] Persistent record of actions the agents took in the past. Streams go away after they're done
+- [ ] Persistent record of terminal actions the agents took in the past. Asciinema streams go away after they're done
   - Record the asciinema output to a file, too, and store it in a database or object store
 - [ ] Prevent the agent from quitting so easily
+  - `claude --continue`, but I don't think this preserves ongoing shell sessions
+  - Run Claude Code in interactive mode, under ht or expect, and keep telling it to "Continue" when it yields control back to the user. Use OpenTelemetry logs to track tool calls it's making (but I don't think these contain enough information)
+  - Patch Claude Code not to exit when it's done, instead prompting it to sleep
+  - Claude Agent SDK
 - [ ] Multiple agents
 - [ ] A way for the agents to communicate
 - [ ] Better system prompt
