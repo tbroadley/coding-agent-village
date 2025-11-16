@@ -15,7 +15,7 @@ services:
         sleep 5
 
         asciinema stream --remote --headless --command 'bash -c "
-        yes Continue | claude --verbose --dangerously-skip-permissions \"Build a substantial piece of software of your choosing.\"
+        claude --verbose --dangerously-skip-permissions \"Build a substantial piece of software of your choosing.\"
         "'
     depends_on:
       asciinema:
