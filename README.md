@@ -16,3 +16,6 @@ docker compose up --build
 - [ ] A way for a human to communicate with the agents
 - [ ] A UI that displays the agents' asciinema streams
 - [ ] Display the Claude Code streaming JSON output in the UI
+- [ ] Figure out how to get similar output to Claude Code streaming JSON out of Codex
+- [ ] Ability to scrub through timeline of past events
+- [ ] Automated summary of what happened on a day or in a given sprint
