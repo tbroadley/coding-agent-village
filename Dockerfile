@@ -25,6 +25,8 @@ WORKDIR /app
 # The install script typically installs to ~/.local/bin or /usr/local/bin
 ENV PATH="${PATH}:/home/claude/.local/bin:/usr/local/bin"
 
+RUN mkdir .claude && echo '{"apiKeyHelper": "echo $CODING_AGENT_VILLAGE_ANTHROPIC_API_KEY"}' > .claude/settings.json
+
 # Run Claude Code as the main process
 ENTRYPOINT ["claude"]
 
