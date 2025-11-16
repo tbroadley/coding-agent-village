@@ -7,6 +7,7 @@ RUN apt-get update && \
     curl \
     bash \
     ca-certificates \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user without sudo permissions
