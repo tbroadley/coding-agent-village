@@ -44,6 +44,3 @@ RUN curl -L https://github.com/memextech/ht-mcp/releases/latest/download/ht-mcp-
 ENV PATH="${PATH}:/home/claude/.local/bin:/usr/local/bin"
 
 RUN claude mcp add --transport stdio ht-mcp ht-mcp
-
-# Run Claude Code as the main process
-ENTRYPOINT ["claude"]
