@@ -1,12 +1,16 @@
 # Use Debian as the base image
 FROM debian:latest
 
-# Install prerequisites
+# Install prerequisites including Rust build dependencies
 RUN apt-get update && \
     apt-get install -y \
-    curl \
     bash \
+    build-essential \
     ca-certificates \
+    curl \
+    git \
+    libssl-dev \
+    pkg-config \
     vim \
     && rm -rf /var/lib/apt/lists/*
 
@@ -15,6 +19,13 @@ RUN useradd -m -s /bin/bash claude
 
 # Switch to claude user for installation
 USER claude
+
+# Install Rust toolchain using rustup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="${PATH}:/home/claude/.cargo/bin"
+
+# Install asciinema 3.0 from source
+RUN cargo install --locked --git https://github.com/asciinema/asciinema
 
 # Install Claude Code using the official installation script (as claude user)
 RUN curl -fsSL https://claude.ai/install.sh | bash
@@ -36,4 +47,3 @@ RUN claude mcp add --transport stdio ht-mcp ht-mcp
 
 # Run Claude Code as the main process
 ENTRYPOINT ["claude"]
-
