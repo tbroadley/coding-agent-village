@@ -2,7 +2,38 @@ services:
   claude-code:
     build: .
     user: claude
-    stdin_open: true
-    tty: true
     env_file:
       - .env
+    command:
+      - --print
+      - --verbose
+      - --output-format
+      - stream-json
+      - --dangerously-skip-permissions
+      - "Use ht-mcp to start an asciinema session, then inside that session, create a file using Vim. The file can contain whatever you want it to."
+      
+  asciinema:
+    image: ghcr.io/asciinema/asciinema-server:20250915
+    env_file:
+      - .env.asciinema
+    volumes:
+      - asciinema_data:/var/opt/asciinema
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: docker.io/library/postgres:14
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  asciinema_data:
+  postgres_data:
