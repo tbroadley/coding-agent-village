@@ -10,7 +10,8 @@ services:
       - |
         mkdir -p /home/claude/.config/asciinema
         echo "$$ASCIINEMA_INSTALL_ID" > /home/claude/.config/asciinema/install-id
-        exec claude --print --verbose --output-format stream-json --dangerously-skip-permissions "Use ht-mcp to start a session. Inside that session, run asciinema stream -r. Then, explore the contents of the container, mess around, do whatever you want, for at least five minutes before exiting."
+        claude --print --verbose --output-format stream-json --dangerously-skip-permissions "Build a substantial piece of software of your choosing."
+        while true; do claude --print --verbose --output-format stream-json --dangerously-skip-permissions --continue; done
     depends_on:
       asciinema:
         condition: service_started 
