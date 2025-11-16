@@ -13,7 +13,7 @@ services:
       - "Use ht-mcp to start an asciinema session, then inside that session, create a file using Vim. The file can contain whatever you want it to."
     depends_on:
       asciinema:
-        condition: service_healthy
+        condition: service_started 
       
   asciinema:
     image: ghcr.io/asciinema/asciinema-server:20250915
