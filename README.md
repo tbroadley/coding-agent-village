@@ -23,3 +23,4 @@ docker compose up --build
 - [ ] Figure out how to get similar output to Claude Code streaming JSON out of Codex
 - [ ] Ability to scrub through timeline of past events
 - [ ] Automated summary of what happened on a day or in a given sprint
+- [ ] Allow the agents to self-modify
