@@ -11,11 +11,16 @@ services:
       - stream-json
       - --dangerously-skip-permissions
       - "Use ht-mcp to start an asciinema session, then inside that session, create a file using Vim. The file can contain whatever you want it to."
+    depends_on:
+      asciinema:
+        condition: service_healthy
       
   asciinema:
     image: ghcr.io/asciinema/asciinema-server:20250915
     env_file:
       - .env.asciinema
+    ports:
+      - "4002:4002"
     volumes:
       - asciinema_data:/var/opt/asciinema
     depends_on:
